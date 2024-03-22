@@ -1,2 +1,1 @@
-Cloudflare API v4 Dynamic DNS Update in Bash, without unnecessary requests
-Now the script also supports v6(AAAA DDNS Recoards)
+纯 v6 自用版本(AAAA DDNS Recoards)
