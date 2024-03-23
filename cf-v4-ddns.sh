@@ -25,6 +25,10 @@ set -o pipefail
 
 # default config
 
+# 宽带ISP前缀 240e 电信   2408 联通  2409 移动
+
+ISP=240e
+
 # 是否开启CF 小云朵 false==曝光自己IP
 CFproxied=true
 
@@ -50,13 +54,13 @@ FORCE=false
 
 # 根据自己网络修改 grep 参数  240e 电信   2408 联通  2409 移动
 
-WANIPSITE=$(ip -6 address show |  grep 240e | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')   
+WANIPSITE=$(ip -6 address show |  grep $ISP | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')   
 
 # Site to retrieve WAN ip, other examples are: bot.whatismyipaddress.com, https://api.ipify.org/ ...
 if [ "$CFRECORD_TYPE" = "A" ]; then
   :
 elif [ "$CFRECORD_TYPE" = "AAAA" ]; then
-  WANIPSITE=$(ip -6 address show |  grep 240e | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')
+  WANIPSITE=$(ip -6 address show |  grep $ISP | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')
 else
   echo "$CFRECORD_TYPE specified is invalid, CFRECORD_TYPE can only be A(for IPv4)|AAAA(for IPv6)"
   exit 2
@@ -92,7 +96,7 @@ if [ "$CFRECORD_NAME" != "$CFZONE_NAME" ] && ! [ -z "${CFRECORD_NAME##*$CFZONE_N
 fi
 
 # Get current and old WAN ip
-WAN_IP=$(ip -6 address show |  grep 240e | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')   # `curl -s ${WANIPSITE}`
+WAN_IP=$(ip -6 address show |  grep $ISP | awk '{print $2}' | cut -d'/' -f1 | sed -n '1p')   # `curl -s ${WANIPSITE}`
 echo "Get current and old WAN ip: $WAN_IP"
 WAN_IP_FILE=$HOME/.cf-wan_ip_$CFRECORD_NAME.txt
 if [ -f $WAN_IP_FILE ]; then
